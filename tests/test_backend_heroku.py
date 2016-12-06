@@ -6,7 +6,7 @@ import responses
 @responses.activate
 def test_heroku_backend():
     responses.add(responses.GET, 'https://api.heroku.com/apps/myapp/config-vars',
-        body='{"DATABASE_URL": "postgres://mydbhost"}', content_type='application/json')
+        json={"DATABASE_URL": "postgres://mydbhost"})
 
     config = {
         'heroku_api_token': 'foobar',
