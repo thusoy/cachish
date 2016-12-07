@@ -17,3 +17,4 @@ def test_heroku_backend():
     value = backend.get()
     assert len(responses.calls) == 1
     assert value == 'postgres://mydbhost'
+    assert responses.calls[0].request.headers.get('Authorization') == 'Bearer foobar'
