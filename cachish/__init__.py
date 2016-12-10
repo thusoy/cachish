@@ -2,6 +2,7 @@ from . import backends
 
 from flask import Flask, jsonify, request, Response, current_app, abort
 
+import binascii
 import hashlib
 import os
 from functools import wraps
@@ -57,8 +58,11 @@ def create_view_for_value(module):
 
 def write_to_cache(value):
     cache_file = get_cache_file()
-    with open(cache_file, 'wb') as fh:
+    temp_filename = '.' + binascii.hexlify(os.urandom(16)).decode('utf-8')
+    tempfile = os.path.join(current_app.config.cache_dir, temp_filename)
+    with open(tempfile, 'wb') as fh:
         fh.write(value.encode('utf-8'))
+    os.rename(tempfile, cache_file)
 
 
 def read_from_cache():
