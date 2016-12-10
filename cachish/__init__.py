@@ -15,9 +15,8 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     if items:
         for url, endpoint_config in items.items():
             module_name = endpoint_config['module']
-            module_constructor = getattr(backends, module_name)
             parameters = endpoint_config.get('parameters', {})
-            module = module_constructor(**parameters)
+            module = get_module(module_name, parameters)
             app.add_url_rule(url, view_func=create_view_for_value(module))
 
     app.config.auth = auth or {}
@@ -32,6 +31,11 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
 def test_cache_dir_writeable(cache_dir):
     with open(os.path.join(cache_dir, '.testfile'), 'w') as fh:
         pass
+
+
+def get_module(name, parameters):
+    constructor = getattr(backends, name)
+    return constructor(**parameters)
 
 
 def create_view_for_value(module):
