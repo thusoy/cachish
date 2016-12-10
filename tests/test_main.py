@@ -1,5 +1,6 @@
 import hashlib
 import os
+import stat
 from unittest import mock
 
 from requests.exceptions import HTTPError
@@ -24,7 +25,9 @@ def test_working_call(client):
     cache_file = os.path.join(client.application.config.cache_dir, cache_filename)
     with open(cache_file) as fh:
         assert fh.read() == 'MYVALUE'
-
+    cache_stat = os.stat(cache_file)
+    cache_mode = stat.S_IMODE(cache_stat.st_mode)
+    assert cache_mode == 0o400
 
 
 def test_invalid_token(client):
