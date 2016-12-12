@@ -30,6 +30,11 @@ def test_working_call(client):
     assert cache_mode == 0o400
 
 
+def test_auth_404(client):
+    assert client.get('/some/path').status_code == 404
+    assert client.get('/heroku/database-url/some/subpath').status_code == 404
+
+
 def test_invalid_token(client):
     response = client.get('/heroku/database-url', headers={
         'authorization': 'Bearer foobar',
