@@ -14,11 +14,7 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     app = Flask(__name__, static_folder=None)
 
     if items:
-        for url, endpoint_config in items.items():
-            module_name = endpoint_config['module']
-            parameters = endpoint_config.get('parameters', {})
-            module = get_module(module_name, parameters)
-            app.add_url_rule(url, view_func=create_view_for_value(module))
+        add_item_views(items, app)
 
     app.config.auth = auth or {}
     app.config.cache_dir = cache_dir
@@ -28,6 +24,14 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     test_cache_dir_writeable(cache_dir)
 
     return app
+
+
+def add_item_views(items, app):
+    for url, endpoint_config in items.items():
+        module_name = endpoint_config['module']
+        parameters = endpoint_config.get('parameters', {})
+        module = get_module(module_name, parameters)
+        app.add_url_rule(url, view_func=create_view_for_value(module))
 
 
 def create_app_from_file(filename=None):
