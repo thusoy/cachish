@@ -6,7 +6,7 @@ class Heroku(object):
             api_token=None,
             app=None,
             config_key=None,
-            ):
+            ): # pylint: disable=too-many-arguments
         assert api_token is not None
         assert app is not None
         assert config_key is not None

@@ -1,14 +1,13 @@
-from . import backends
-
-import yaml
-from flask import Flask, jsonify, request, Response, current_app, abort
-
 import binascii
 import hashlib
 import os
 from functools import wraps
 from fnmatch import fnmatch
 
+import yaml
+from flask import Flask, jsonify, request, Response, current_app, abort
+
+from . import backends
 
 def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     app = Flask(__name__, static_folder=None)
@@ -64,8 +63,7 @@ def create_view_for_value(module):
         }
         try:
             value = module.get()
-        except:
-            logging.exception('Failed to get value from %s' % module)
+        except: # pylint: disable=bare-except
             fresh = False
             try:
                 value = read_from_cache()
@@ -170,8 +168,8 @@ def authenticate():
     return Response(message, 401, {})
 
 
-def requires_auth(f):
-    @wraps(f)
+def requires_auth(view):
+    @wraps(view)
     def decorated(*args, **kwargs):
         auth = request.headers.get('authorization')
         if not auth:
@@ -186,5 +184,5 @@ def requires_auth(f):
         if not check_auth(token):
             return authenticate()
 
-        return f(*args, **kwargs)
+        return view(*args, **kwargs)
     return decorated
