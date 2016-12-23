@@ -43,8 +43,10 @@ def create_app_from_file(filename=None):
 
 
 def test_cache_dir_writeable(cache_dir):
-    with open(os.path.join(cache_dir, '.testfile'), 'w') as fh:
+    testfile = os.path.join(cache_dir, '.testfile')
+    with open(testfile, 'w'):
         pass
+    os.remove(testfile)
 
 
 def get_module(name, parameters):
