@@ -2,12 +2,11 @@
 # -*- encoding: utf-8 -*-
 
 from setuptools import setup, find_packages
-import sys
 
 install_requires = [
     'flask',
-    'requests',
     'pyyaml',
+    'requests',
 ]
 
 setup(
