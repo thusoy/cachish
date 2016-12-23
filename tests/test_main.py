@@ -19,6 +19,7 @@ def test_working_call(client):
         })
 
     assert response.status_code == 200
+    assert response.headers.get('x-cache') == 'miss'
 
     # Should have written to cache
     cache_filename = hashlib.sha256(b'/heroku/database-url').hexdigest()
@@ -57,6 +58,7 @@ def test_backend_failure_no_cached(client):
         'authorization': 'bearer footoken',
     })
     assert response.status_code == 503
+    assert response.headers.get('x-cache') == 'miss'
 
 
 @responses.activate
@@ -74,5 +76,6 @@ def test_backend_failure_cached(client):
     response = client.get('/heroku/database-url', headers={
         'authorization': 'bearer footoken',
     })
-    assert response.status_code == 203
+    assert response.status_code == 200
     assert response.data.decode('utf-8') == 'MYCACHEDVALUE'
+    assert response.headers.get('x-cache') == 'hit'

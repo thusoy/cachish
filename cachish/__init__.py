@@ -22,6 +22,7 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
 
     app.config.auth = auth or {}
     app.config.cache_dir = cache_dir
+    add_error_handlers(app)
 
     # Ensure errors are caught at start time and not at request time
     test_cache_dir_writeable(cache_dir)
@@ -52,21 +53,37 @@ def create_view_for_value(module):
     @requires_auth
     def view():
         fresh = True
+        headers = {
+            'Content-Type': 'text/plain',
+        }
         try:
             value = module.get()
         except:
+            logging.exception('Failed to get value from %s' % module)
             fresh = False
             try:
-                return read_from_cache(), 203, {}
-            except FileNotFoundError as e:
+                value = read_from_cache()
+            except FileNotFoundError:
                 abort(503)
 
         if fresh:
             write_to_cache(value)
 
-        return value
+        headers['X-Cache'] = 'miss' if fresh else 'hit'
+
+        return value, 200, headers
 
     return view
+
+
+def add_error_handlers(app):
+
+    def error_503(error): # pylint: disable=unused-argument
+        return 'Upstream failure', 503, {
+            'X-Cache': 'miss',
+        }
+
+    app.register_error_handler(503, error_503)
 
 
 def write_to_cache(value):
