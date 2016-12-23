@@ -15,6 +15,7 @@ class Heroku(object):
         self.target_url = 'https://api.heroku.com/apps/%s/config-vars' % app
         self.session.headers.update({
             'Authorization': 'Bearer %s' % api_token,
+            'Accept': 'application/vnd.heroku+json; version=3',
         })
 
 
