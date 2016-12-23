@@ -148,7 +148,6 @@ def check_auth(token):
         token_globs = [token_globs]
 
     for pattern in token_globs:
-        print('testing %s against %s' % (requested_url, pattern))
         if fnmatch(requested_url, pattern):
             break
     else:
