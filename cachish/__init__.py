@@ -10,7 +10,7 @@ from fnmatch import fnmatch
 
 
 def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
 
     if items:
         for url, endpoint_config in items.items():
