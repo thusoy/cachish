@@ -11,8 +11,8 @@ def test_parsing_normal():
             /database-url:
                 module: "Heroku"
                 parameters:
-                    heroku_app: "myapp"
-                    heroku_api_token: "footoken"
+                    app: "myapp"
+                    api_token: "footoken"
                     config_key: "MYKEY"
 
         auth:
