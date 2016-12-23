@@ -16,3 +16,12 @@ Local development
 To re-run tests whenever you change something, do:
 
     $ ./tools/watch_and_run_tests.sh
+
+
+Deployment
+----------
+
+Recommended deployment is to run the app with gunicorn or similar:
+
+    $ pip install gunicorn
+    $ CACHISH_CONFIG_FILE=<config-file> gunicorn 'cachish:create_app_from_file()'
