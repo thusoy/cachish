@@ -7,7 +7,7 @@ import sys
 install_requires = [
     'flask',
     'requests',
-    'toml',
+    'pyyaml',
 ]
 
 setup(

@@ -1,5 +1,6 @@
 from . import backends
 
+import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
 
 import binascii
@@ -26,6 +27,12 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     test_cache_dir_writeable(cache_dir)
 
     return app
+
+
+def create_app_from_file(filename):
+    with open(filename) as fh:
+        config = yaml.load(fh)
+    return create_app(**config)
 
 
 def test_cache_dir_writeable(cache_dir):
