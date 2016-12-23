@@ -1,8 +1,8 @@
 import binascii
 import hashlib
 import os
+import fnmatch
 from functools import wraps
-from fnmatch import fnmatch
 
 import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
@@ -152,7 +152,7 @@ def check_auth(token):
         token_globs = [token_globs]
 
     for pattern in token_globs:
-        if fnmatch(requested_url, pattern):
+        if fnmatch.fnmatchcase(requested_url, pattern):
             break
     else:
         print('No patterns for token %s' % token)
