@@ -1,5 +1,7 @@
 # cachish
 
+*Ceci n'est pas une cache*
+
 Cache-ish thingie for serving stale responses when source is unavailable. Useful when you absolutely need to get something from the network before starting something else, but accept getting a stale response if the network or external resource is unavailable.
 
 Also helps with privilege separation, ensuring your main code can run without needing arbitrary network privileges, or needing unrestricted API tokens to external resources.
