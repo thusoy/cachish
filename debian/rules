@@ -1,0 +1,7 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with python-virtualenv,python3
+
+override_dh_virtualenv:
+	dh_virtualenv --setuptools --python /usr/bin/python3
