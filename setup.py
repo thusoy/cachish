@@ -18,6 +18,12 @@ setup(
     description="Stale cache-ish thingie",
     packages=find_packages(),
     install_requires=install_requires,
+    extras_require={
+        'gunicorn': [
+            'gunicorn',
+            'gevent',
+        ]
+    },
     classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
