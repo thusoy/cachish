@@ -37,7 +37,7 @@ def create_app_from_file(filename=None):
     if filename is None:
         filename = os.environ['CACHISH_CONFIG_FILE']
     with open(filename) as fh:
-        config = yaml.load(fh)
+        config = yaml.load(fh) or {}
     return create_app(**config)
 
 
