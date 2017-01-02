@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+main () {
+    remove_config_file
+    remove_cache_dir
+}
+
+remove_config_file () {
+    rm -f /etc/cachish.yml
+}
+
+remove_cache_dir () {
+    rm -rf /var/cache/cachish
+}
+
+main
