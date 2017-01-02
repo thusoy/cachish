@@ -14,12 +14,14 @@ create_user () {
     adduser \
         --system \
         --home "$CACHE_DIR" \
+        --no-create-home \
         --disabled-password \
         --group \
         cachish
 }
 
 fix_cache_dir_permissions () {
+    mkdir -p "$CACHE_DIR"
     chown cachish:cachish "$CACHE_DIR"
     chmod 750 "$CACHE_DIR"
 }
