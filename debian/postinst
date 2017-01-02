@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+CACHE_DIR=/var/cache/cachish
+
+main () {
+    create_user
+    fix_cache_dir_permissions
+}
+
+create_user () {
+    adduser \
+        --system \
+        --home "$CACHE_DIR" \
+        --disabled-password \
+        --group \
+        cachish
+}
+
+fix_cache_dir_permissions () {
+    chown cachish:cachish "$CACHE_DIR"
+    chmod 750 "$CACHE_DIR"
+}
+
+main
