@@ -5,9 +5,14 @@ set -eu
 CACHE_DIR=/var/cache/cachish
 
 main () {
+    create_cache_dir
     create_user
     fix_cache_dir_permissions
     add_default_config
+}
+
+create_cache_dir () {
+    mkdir -p "$CACHE_DIR"
 }
 
 create_user () {
@@ -21,7 +26,6 @@ create_user () {
 }
 
 fix_cache_dir_permissions () {
-    mkdir -p "$CACHE_DIR"
     chown cachish:cachish "$CACHE_DIR"
     chmod 750 "$CACHE_DIR"
 }
