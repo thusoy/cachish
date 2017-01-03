@@ -93,3 +93,4 @@ debian/cachish
 debian/*.debhelper
 debian/*.substvars
 debian/files
+debian/changelog

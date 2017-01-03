@@ -8,4 +8,4 @@ $TEST_COMMAND
     --patterns="*.py" \
     --recursive \
     --command "$TEST_COMMAND" \
-    tests/ cachish/
+    tests/ cachish/ tools/
