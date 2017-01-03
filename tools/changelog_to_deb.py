@@ -34,6 +34,8 @@ def get_args():
 
 def convert_changelog(changelog, project_name, author, author_email):
     def finish_changeset():
+        if not changeset_date:
+            return
         date = changeset_date.strftime(PARTIAL_DATE_FORMAT) + ' +0000'
         changesets.append('\n -- %s <%s>  %s\n' % (author, author_email, date))
 
