@@ -23,7 +23,28 @@ To re-run tests whenever you change something, do:
 Deployment
 ----------
 
-Recommended deployment is to run the app with gunicorn or similar:
+In decreasing order of stuff you have to do:
 
-    $ pip install gunicorn
-    $ CACHISH_CONFIG_FILE=<config-file> gunicorn 'cachish:create_app_from_file()'
+* Use the salt state [here](https://github.com/thusoy/salt-states/salt/cachish)
+  and configure through pillar. If you're using a different automation tool and
+  have written a cookbook/playbook/module/thing for cachish, please let me know
+  and I'll add a link to it here!
+
+* Install from my apt repo:
+  ```
+  $ echo 'deb https://thusoy-apt.s3-accelerate.amazonaws.com stable main' | sudo tee -a /etc/apt/sources.list
+  $ curl https://github/thusoy/repo/release-key.asc | sudo apt-key add -
+  $ sudo apt-get update
+  $ sudo apt-get install cachish
+  ```
+  Configure by editing `/etc/cachish.yml` and restarting the service.
+
+* Build the debian package yourself and upload to your own repo:
+  `./tools/build_dep.sh`
+* Install from PyPI and run with gunicorn: `pip install cachish[gunicorn]`,
+  then `CACHISH_CONFIG_FILE=/path/to/config gunicorn --worker-class gevent 'cachish:create_app_from_file()'`
+  (mostly useul for playing around and testing). To deploy on a server you
+  should ensure the service is started on boot, drops privileges and has a cache
+  directory no other user can read from.
+* Clone the repo, install the dependencies (`./configure`), and run
+  with `./devserver.py`. Also mostly useful for testing.
