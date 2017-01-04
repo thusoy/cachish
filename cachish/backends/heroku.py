@@ -10,7 +10,7 @@ class Heroku(object):
         assert api_token is not None
         assert app is not None
         assert config_key is not None
-        self.config_key = config_key
+        self.config_keys = [config_key] if isinstance(config_key, str) else config_key
         self.session = Session()
         self.target_url = 'https://api.heroku.com/apps/%s/config-vars' % app
         self.session.headers.update({
@@ -23,4 +23,4 @@ class Heroku(object):
         response = self.session.get(self.target_url, timeout=5)
         response.raise_for_status()
         config = response.json()
-        return {self.config_key: config[self.config_key]}
+        return {key: config[key] for key in self.config_keys}
