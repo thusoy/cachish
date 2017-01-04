@@ -1,0 +1,63 @@
+#!/bin/sh
+
+set -eu
+
+CACHE_DIR=/var/cache/cachish
+
+main () {
+    create_cache_dir
+    create_user
+    fix_cache_dir_permissions
+    add_default_config
+}
+
+create_cache_dir () {
+    mkdir -p "$CACHE_DIR"
+}
+
+create_user () {
+    adduser \
+        --system \
+        --home "$CACHE_DIR" \
+        --no-create-home \
+        --disabled-password \
+        --group \
+        cachish
+}
+
+fix_cache_dir_permissions () {
+    chown cachish:cachish "$CACHE_DIR"
+    chmod 750 "$CACHE_DIR"
+}
+
+add_default_config () {
+    config_file=/etc/cachish.yml
+    test -f "$config_file" && return
+    cat > "$config_file" <<"EOF"
+# Cachish config file. Should be in YAML.
+
+# Set which items should be accessible through cachish, as a url-to-dict mapping.
+# Example:
+# items:
+#     /database-url:
+#         module: Heroku
+#         parameters:
+#             api_token: my-heroku-api-token
+#             app: my-heroku-app
+#             config_key: DATABASE_URL
+
+# Add key-value pairs here granting access to items at different urls.
+# Always use strong randomly generated tokens. To generate such you can f. ex
+# do `head -c 16 /dev/urandom | base64` or `openssl rand -base64 16`
+# For example, to grant the token 'foobar' access to /database-url:
+# auth:
+#     foobar: /database-url
+
+# Uncomment this line to override the location of the cache.
+# cache_dir: /var/cache/cachish
+EOF
+}
+
+main
+
+#DEBHELPER#

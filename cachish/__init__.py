@@ -1,5 +1,6 @@
 import binascii
 import hashlib
+import logging
 import os
 import fnmatch
 from functools import wraps
@@ -37,7 +38,7 @@ def create_app_from_file(filename=None):
     if filename is None:
         filename = os.environ['CACHISH_CONFIG_FILE']
     with open(filename) as fh:
-        config = yaml.load(fh)
+        config = yaml.load(fh) or {}
     return create_app(**config)
 
 
@@ -64,6 +65,7 @@ def create_view_for_value(module):
         try:
             value = module.get()
         except: # pylint: disable=bare-except
+            logging.exception('Failed to get value from %s', module)
             fresh = False
             try:
                 value = read_from_cache()

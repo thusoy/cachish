@@ -1,0 +1,16 @@
+[Unit]
+Description=The stale cache-ish service
+After=network.target
+
+[Service]
+Environment=CACHISH_CONFIG_FILE=/etc/cachish.yml
+ExecStart=/usr/share/python/cachish/bin/gunicorn \
+    --bind 127.0.0.1:2469 \
+    --worker-class gevent \
+    cachish:create_app_from_file()
+Restart=on-failure
+User=cachish
+Group=cachish
+
+[Install]
+WantedBy=multi-user.target
