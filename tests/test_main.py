@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 import stat
 from unittest import mock
@@ -25,7 +26,7 @@ def test_working_call(client):
     cache_filename = hashlib.sha256(b'/heroku/database-url').hexdigest()
     cache_file = os.path.join(client.application.config.cache_dir, cache_filename)
     with open(cache_file) as fh:
-        assert fh.read() == 'MYVALUE'
+        assert json.load(fh) == {'MYKEY': 'MYVALUE'}
     cache_stat = os.stat(cache_file)
     cache_mode = stat.S_IMODE(cache_stat.st_mode)
     assert cache_mode == 0o400
@@ -71,11 +72,13 @@ def test_backend_failure_cached(client):
     cache_filename = hashlib.sha256(b'/heroku/database-url').hexdigest()
     cache_file = os.path.join(application_cache_dir, cache_filename)
     with open(cache_file, 'w') as fh:
-        fh.write('MYCACHEDVALUE')
+        fh.write('{"MYKEY": "MYCACHEDVALUE"}')
 
     response = client.get('/heroku/database-url', headers={
         'authorization': 'bearer footoken',
     })
     assert response.status_code == 200
-    assert response.data.decode('utf-8') == 'MYCACHEDVALUE'
+    assert json.loads(response.data.decode('utf-8')) == {
+        'MYKEY': 'MYCACHEDVALUE',
+    }
     assert response.headers.get('x-cache') == 'hit'

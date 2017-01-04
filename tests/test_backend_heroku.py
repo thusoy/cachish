@@ -5,8 +5,9 @@ import responses
 
 @responses.activate
 def test_heroku_backend():
+    response = {"DATABASE_URL": "postgres://mydbhost"}
     responses.add(responses.GET, 'https://api.heroku.com/apps/myapp/config-vars',
-        json={"DATABASE_URL": "postgres://mydbhost"})
+        json=response)
 
     config = {
         'api_token': 'foobar',
@@ -16,5 +17,5 @@ def test_heroku_backend():
     backend = Heroku(**config)
     value = backend.get()
     assert len(responses.calls) == 1
-    assert value == 'postgres://mydbhost'
+    assert value == response
     assert responses.calls[0].request.headers.get('Authorization') == 'Bearer foobar'

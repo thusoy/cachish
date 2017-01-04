@@ -23,4 +23,4 @@ class Heroku(object):
         response = self.session.get(self.target_url, timeout=5)
         response.raise_for_status()
         config = response.json()
-        return config[self.config_key]
+        return {self.config_key: config[self.config_key]}

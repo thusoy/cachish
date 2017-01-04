@@ -1,8 +1,9 @@
 import binascii
+import fnmatch
 import hashlib
+import json
 import logging
 import os
-import fnmatch
 from functools import wraps
 
 import yaml
@@ -60,7 +61,7 @@ def create_view_for_value(module):
     def view():
         fresh = True
         headers = {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
         }
         try:
             value = module.get()
@@ -77,7 +78,7 @@ def create_view_for_value(module):
 
         headers['X-Cache'] = 'miss' if fresh else 'hit'
 
-        return value, 200, headers
+        return json.dumps(value), 200, headers
 
     return view
 
@@ -96,15 +97,15 @@ def write_to_cache(value):
     cache_file = get_cache_file()
     temp_filename = '.' + binascii.hexlify(os.urandom(16)).decode('utf-8')
     tempfile = os.path.join(current_app.config.cache_dir, temp_filename)
-    with secure_open_file(tempfile) as fh:
-        fh.write(value.encode('utf-8'))
+    with secure_open_file(tempfile, 'w') as fh:
+        json.dump(value, fh)
     os.rename(tempfile, cache_file)
 
 
 def read_from_cache():
     cache_file = get_cache_file()
     with open(cache_file) as fh:
-        return fh.read()
+        return json.load(fh)
 
 
 def secure_open_file(filename, mode='wb'):
