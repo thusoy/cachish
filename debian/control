@@ -7,7 +7,7 @@ Standards-Version: 3.9.5
 
 Package: cachish
 Architecture: any
-Pre-Depends: dpkg (>= 1.16.1), python3-minimal, ${misc:Pre-Depends}
-Depends: ${python:Depends}, ${misc:Depends}, adduser
+Pre-Depends: dpkg (>= 1.16.1), ${misc:Pre-Depends}
+Depends: ${python:Depends}, ${misc:Depends}, adduser, python3
 Description: Stale cache-ish thingie
  Stale cache-ish thingie
