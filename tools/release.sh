@@ -54,7 +54,7 @@ patch_changelog () {
 
 
 git_commit () {
-    git add setup.py
+    git add setup.py CHANGELOG.md
     git commit --message "Release v$version"
     git tag -m "Release v$version" "v$version"
 }
