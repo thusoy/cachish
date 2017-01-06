@@ -29,7 +29,10 @@ def app():
             },
         },
         'auth': {
-            'footoken': '/heroku/*'
+            'client_name': {
+                'token': 'footoken',
+                'url': '/heroku/*'
+            }
         },
         'cache_dir': cache_dir,
     }

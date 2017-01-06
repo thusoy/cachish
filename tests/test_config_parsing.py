@@ -17,7 +17,9 @@ CONFIG = textwrap.dedent('''\
                 config_key: "MYKEY"
 
     auth:
-        footoken: "/database-url"
+        client_name:
+            token: footoken
+            url: "/database-url"
 
     cache_dir: "{cache_dir}"
 ''')
@@ -33,7 +35,10 @@ def test_parsing_normal():
             break
     assert has_url_endpoint
     assert app.config.auth == {
-        'footoken': '/database-url',
+        'footoken': {
+            'name': 'client_name',
+            'url': '/database-url',
+        },
     }
 
 
@@ -46,7 +51,10 @@ def test_parsing_env_var():
             app = create_app_from_file()
 
     assert app.config.auth == {
-        'footoken': '/database-url',
+        'footoken': {
+            'name': 'client_name',
+            'url': '/database-url',
+        },
     }
 
 

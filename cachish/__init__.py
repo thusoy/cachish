@@ -17,7 +17,7 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     if items:
         add_item_views(items, app)
 
-    app.config.auth = auth or {}
+    app.config.auth = transform_auth(auth)
     app.config.cache_dir = cache_dir
     add_error_handlers(app)
 
@@ -25,6 +25,25 @@ def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     test_cache_dir_writeable(cache_dir)
 
     return app
+
+
+def transform_auth(auth):
+    ''' Transform a name: {token, url} to token: {name, url} to enable
+    constant-time lookup based on the token
+    '''
+    if not auth:
+        return {}
+
+    transformed_auth = {}
+    for name, params in auth.items():
+        assert 'url' in params, 'auth must specify a url'
+        assert 'token' in params, 'auth must specify a token'
+        transformed_auth[params['token']] = {
+            'name': name,
+            'url': params['url'],
+        }
+
+    return transformed_auth
 
 
 def add_item_views(items, app):
@@ -145,10 +164,12 @@ def check_auth(token):
     url combination is valid.
     """
     requested_url = request.path
-    token_globs = current_app.config.auth.get(token)
-    if not token_globs:
+    token_spec = current_app.config.auth.get(token)
+    if not token_spec:
         print('no accesses for token %s' % token)
         abort(403)
+
+    token_globs = token_spec['url']
 
     # If there's only a single glob, transform to list
     if isinstance(token_globs, str):
