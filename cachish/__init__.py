@@ -128,7 +128,7 @@ def read_from_cache():
 
 
 def secure_open_file(filename, mode='wb'):
-    """ Create a new file with 0600 permissions, ensuring exclusive access.
+    """ Create a new file with 400 permissions, ensuring exclusive access.
 
     The motivation is to avoid information disclosure if any other users have
     access to the cache_dir and can create files. We thus need to ensure that
