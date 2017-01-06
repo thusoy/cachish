@@ -7,6 +7,7 @@ python:
   - 3.5-dev
   - 3.6-dev
   - nightly
+  - pypy3
 install: ./configure
 before_script: ./tools/lint.sh
 script: ./test
