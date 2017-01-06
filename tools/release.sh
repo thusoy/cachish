@@ -68,6 +68,7 @@ upload_to_pypi () {
 }
 
 git_push () {
+    git push
     git push --tags
 }
 
