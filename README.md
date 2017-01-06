@@ -1,4 +1,4 @@
-# cachish
+# cachish [![Build Status](https://travis-ci.com/thusoy/cachish.svg?branch=master)](https://travis-ci.com/thusoy/cachish)
 
 *Ceci n'est pas une cache*
 
