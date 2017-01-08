@@ -5,8 +5,8 @@ import datetime
 import re
 
 VERSION_HEADER_RE = re.compile(r'(?P<version>\d+\.\d+\.\d+) ?- ?(?P<date>\d{4}-\d{2}-\d{2})')
-CHANGE_TYPE_RE = re.compile(r'^## ?(?P<change_type>.*)')
-SKIP_LINE_RE = re.compile(r'^=+|^$')
+CHANGE_TYPE_RE = re.compile(r'^### ?(?P<change_type>.*)')
+SKIP_LINE_RE = re.compile(r'^-{2,}|^$')
 LIST_LINE_RE = re.compile(r'^[-*] ?(?P<line_item>.*)')
 CONTINUATION_LINE_RE = re.compile(r'^ {1,4}.*')
 # This date format doesn't include the timezone, since we just hard-code that
