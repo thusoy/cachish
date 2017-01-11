@@ -56,6 +56,8 @@ add_default_config () {
 # Uncomment this line to override the location of the cache.
 # cache_dir: /var/cache/cachish
 EOF
+    chown root:cachish "$config_file"
+    chmod 640 "$config_file"
 }
 
 main
