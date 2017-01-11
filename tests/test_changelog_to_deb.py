@@ -11,7 +11,7 @@ def test_simple_changelog():
         # Change log
 
         1.0.0 - 2016-12-23
-        ==================
+        ------------------
 
         First release.
     ''')
@@ -31,22 +31,22 @@ def test_multiline_changelog():
         Some text that should be skipped.
 
         1.0.1 - 2016-01-05
-        ==================
+        ------------------
 
-        ## Fixed
+        ### Fixed
         - Some bug.
 
 
         1.0.0 - 2016-01-01
-        ==================
+        ------------------
 
         General notes.
 
-        ## Added
+        ### Added
         - Point one.
         - Point two.
 
-        ## Changed
+        ### Changed
         - Point three over
           multiple lines.
     ''')
