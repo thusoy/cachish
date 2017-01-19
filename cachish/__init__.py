@@ -51,7 +51,7 @@ def add_item_views(items, app):
         module_name = endpoint_config['module']
         parameters = endpoint_config.get('parameters', {})
         module = get_module(module_name, parameters)
-        app.add_url_rule(url, view_func=create_view_for_value(module))
+        app.add_url_rule(url, endpoint=url, view_func=create_view_for_value(module))
 
 
 def create_app_from_file(filename=None):

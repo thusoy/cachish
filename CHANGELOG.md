@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
+UNRELEASED -
+------------------
+
+### Fixed
+- Failed to start if configured with more than one item
+
+
 1.1.0 - 2017-01-06
 ------------------
 
