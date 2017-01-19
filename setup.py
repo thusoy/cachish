@@ -11,7 +11,7 @@ install_requires = [
 
 setup(
     name='cachish',
-    version='1.1.0',
+    version='1.1.1',
     author='Tarjei Husøy',
     author_email='git@thusoy.com',
     url='https://github.com/thusoy/cachish',
