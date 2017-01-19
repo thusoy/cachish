@@ -10,6 +10,7 @@ UNRELEASED -
 
 ### Fixed
 - Failed to start if configured with more than one item
+- `~/.netrc` files are now ignored to prevent them overriding authentication
 
 
 1.1.0 - 2017-01-06

@@ -12,6 +12,7 @@ class Heroku(object):
         assert config_key is not None
         self.config_keys = [config_key] if isinstance(config_key, str) else config_key
         self.session = Session()
+        self.session.trust_env = False
         self.target_url = 'https://api.heroku.com/apps/%s/config-vars' % app
         self.session.headers.update({
             'Authorization': 'Bearer %s' % api_token,
