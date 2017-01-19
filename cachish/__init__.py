@@ -10,9 +10,14 @@ import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
 
 from . import backends
+from .middleware import CanonicalLogLineMiddleware
+
+canonical_logger = CanonicalLogLineMiddleware()
 
 def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     app = Flask(__name__, static_folder=None)
+
+    canonical_logger.init_app(app)
 
     if items:
         add_item_views(items, app)
