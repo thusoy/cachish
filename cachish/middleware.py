@@ -38,7 +38,7 @@ class CanonicalLoggerMiddleware(object):
 
 
     def add_measure(self, key, value):
-        self._add_extra('#%s' % key, '%.3fs' % value)
+        self._add_extra('measure#%s' % key, '%.3fs' % value)
 
 
     def _add_extra(self, key, value):
