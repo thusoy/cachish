@@ -20,6 +20,8 @@ def test_heroku_backend():
     value = backend.get()
     assert len(responses.calls) == 1
     assert value == {'key1': 'value1'}
+    sent_user_agent = responses.calls[0].request.headers['user-agent']
+    assert 'cachish' in sent_user_agent
 
 
 @responses.activate
