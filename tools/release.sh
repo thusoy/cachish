@@ -36,11 +36,7 @@ sanity_check () {
 }
 
 bump_version () {
-    temp_setup=$(mktemp)
-    sed "s/version=.*,/version='$version',/" \
-        < setup.py \
-        > "$temp_setup"
-    mv "$temp_setup" setup.py
+    echo "__version__ = '$version'" > cachish/_version.py
 }
 
 patch_changelog () {
@@ -54,7 +50,7 @@ patch_changelog () {
 
 
 git_commit () {
-    git add setup.py CHANGELOG.md
+    git add cachish/_version.py CHANGELOG.md
     git commit --message "Release v$version"
     git tag -m "Release v$version" "v$version"
 }

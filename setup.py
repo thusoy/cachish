@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+import os
+import re
 from setuptools import setup, find_packages
 
 install_requires = [
@@ -9,9 +11,15 @@ install_requires = [
     'requests',
 ]
 
+version_file = os.path.join(os.path.dirname(__file__), 'cachish', '_version.py')
+with open(version_file) as fh:
+    version_file_contents = fh.read().strip()
+    version_match = re.match(r"__version__ = '(\d\.\d.\d.*)'", version_file_contents)
+    version = version_match.group(1)
+
 setup(
     name='cachish',
-    version='1.1.1',
+    version=version,
     author='Tarjei Husøy',
     author_email='git@thusoy.com',
     url='https://github.com/thusoy/cachish',
