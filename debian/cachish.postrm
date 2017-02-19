@@ -5,6 +5,7 @@ set -eu
 main () {
     remove_config_file
     remove_cache_dir
+    remove_log_files
 }
 
 remove_config_file () {
@@ -13,6 +14,11 @@ remove_config_file () {
 
 remove_cache_dir () {
     rm -rf /var/cache/cachish
+}
+
+# TODO: Only remove on purge
+remove_log_files () {
+    rm -rf /var/log/cachish
 }
 
 main

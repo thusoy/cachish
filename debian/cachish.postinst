@@ -3,16 +3,26 @@
 set -eu
 
 CACHE_DIR=/var/cache/cachish
+LOG_DIR=/var/log/cachish
 
 main () {
     create_cache_dir
     create_user
     fix_cache_dir_permissions
+    create_log_dir
     add_default_config
 }
 
 create_cache_dir () {
     mkdir -p "$CACHE_DIR"
+}
+
+create_log_dir () {
+    mkdir -p "$LOG_DIR"
+    touch "$LOG_DIR/cachish.warn" "$LOG_DIR/canonical.log"
+    chmod 640 "$LOG_DIR/*"
+    chown -R cachish:adm "$LOG_DIR"
+    chmod 755 "$LOG_DIR"
 }
 
 create_user () {
@@ -32,8 +42,11 @@ fix_cache_dir_permissions () {
 
 add_default_config () {
     config_file=/etc/cachish.yml
+
+    # Don't tamper with the config file if it already exists
     test -f "$config_file" && return
-    cat > "$config_file" <<"EOF"
+
+    cat > "$config_file" <<EOF
 # Cachish config file. Should be in YAML.
 
 # Set which items should be accessible through cachish, as a url-to-dict mapping.
@@ -48,13 +61,42 @@ add_default_config () {
 
 # Add key-value pairs here granting access to items at different urls.
 # Always use strong randomly generated tokens. To generate such you can f. ex
-# do `head -c 16 /dev/urandom | base64` or `openssl rand -base64 16`
+# do \`head -c 16 /dev/urandom | base64\` or \`openssl rand -base64 16\`
 # For example, to grant the token 'foobar' access to /database-url:
 # auth:
 #     foobar: /database-url
 
 # Uncomment this line to override the location of the cache.
-# cache_dir: /var/cache/cachish
+# cache_dir: $CACHE_DIR
+
+# Configure where logs should end up. Configuration given here will extend the
+# default logging specified in \`configure_logging\` in cachish/__init__.py, see
+# https://docs.python.org/2/library/logging.config.html#logging-config-dictschema
+# for documentation of the format
+log_config:
+    handlers:
+        file:
+            class: logging.handlers.WatchedFileHandler
+            level: WARNING
+            formatter: simple
+            filename: $LOG_DIR/cachish.warn
+
+        canonical_file:
+            class: logging.handlers.WatchedFileHandler
+            level: INFO
+            formatter: canonical
+            filename: $LOG_DIR/canonical.log
+
+    loggers:
+        cachish:
+            handlers: [file]
+        cachish.canonical:
+            handlers: [canonical_file]
+        werkzeug:
+            handlers: [file]
+
+    root:
+        handlers: [file]
 EOF
     chown root:cachish "$config_file"
     chmod 640 "$config_file"

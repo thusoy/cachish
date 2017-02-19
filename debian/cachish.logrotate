@@ -1,0 +1,9 @@
+/var/log/cachish/cachish.warn
+/var/log/cachish/canonical.log {
+    rotate 7
+    daily
+    compress
+    missingok
+    notifempty
+    create 0640 cachish adm
+}
