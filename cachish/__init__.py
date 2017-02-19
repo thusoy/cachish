@@ -17,18 +17,22 @@ from . import utils
 from .middleware import CanonicalLoggerMiddleware
 from ._version import __version__
 
-canonical_logger = CanonicalLoggerMiddleware()
-
+_canonical_logger = CanonicalLoggerMiddleware()
 _logger = logging.getLogger(__name__)
 
 
-def create_app(auth=None, items=None, cache_dir='/var/cache/cachish', log_config=None):
+def create_app(
+        auth=None,
+        items=None,
+        cache_dir='/var/cache/cachish',
+        log_config=None,
+    ): # pylint: disable=too-many-arguments
     app = Flask(__name__, static_folder=None)
 
     if items:
         add_item_views(items, app)
 
-    canonical_logger.init_app(app)
+    _canonical_logger.init_app(app)
     configure_logging(log_config)
 
     app.config.auth = transform_auth(auth)
@@ -86,7 +90,7 @@ def create_view_for_value(module):
     @requires_auth
     def view():
         fresh = True
-        canonical_logger.tag = module.tag
+        _canonical_logger.tag = module.tag
         headers = {
             'Content-Type': 'application/json',
             'Server': 'Cachish/%s' % __version__,
@@ -105,8 +109,8 @@ def create_view_for_value(module):
                 abort(503)
 
         cache_status = 'miss' if fresh else 'hit'
-        canonical_logger.add_measure('timing_backend', backend_end_time - backend_start_time)
-        canonical_logger.add_to_log('cache', cache_status)
+        _canonical_logger.add_measure('timing_backend', backend_end_time - backend_start_time)
+        _canonical_logger.add_to_log('cache', cache_status)
 
         if fresh:
             cache.write_to_cache(value)
@@ -135,7 +139,7 @@ def check_auth(token):
     requested_url = request.path
     token_spec = current_app.config.auth.get(token)
     if not token_spec:
-        _logger.debug('Rejecting unknown token "%s"' % token)
+        _logger.debug('Rejecting unknown token "%s"', token)
         abort(403)
 
     token_globs = token_spec['url']
@@ -148,8 +152,8 @@ def check_auth(token):
         if fnmatch.fnmatchcase(requested_url, pattern):
             break
     else:
-        _logger.debug('Token "%s" has no patterns matching the current url of %s' % (
-            token, requested_url))
+        _logger.debug('Token "%s" has no patterns matching the current url of %s',
+            token, requested_url)
         abort(403)
 
     return True

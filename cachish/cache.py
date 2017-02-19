@@ -58,4 +58,3 @@ def _get_cache_file():
 
 def _get_cache_filename(url):
     return hashlib.sha256(url.encode('utf-8')).hexdigest()
-

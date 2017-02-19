@@ -1,3 +1,5 @@
+# pylint: disable=protected-access,no-self-use
+
 import time
 import re
 from collections import OrderedDict
@@ -8,7 +10,7 @@ from werkzeug.routing import RequestRedirect, MethodNotAllowed, NotFound
 
 from ._version import __version__
 
-WHITESPACE_RE = re.compile('\s')
+WHITESPACE_RE = re.compile(r'\s')
 
 _logger = getLogger('cachish.canonical')
 
@@ -80,7 +82,7 @@ class CanonicalLoggerMiddleware(object):
             params['error_msg'] = str(exception)
 
         log_line_items = (format_key_value_pair(key, val) for (key, val) in params.items())
-        _logger.info('canonical-log-line %s' % ' '.join(log_line_items))
+        _logger.info('canonical-log-line %s', ' '.join(log_line_items))
 
 
 def get_default_tag(app):
@@ -96,14 +98,15 @@ def get_view_function(app, url, method):
     it will be called with, or None if there is no view.
     Creds: http://stackoverflow.com/a/38488506
     """
+    # pylint: disable=too-many-return-statements
 
     adapter = app.create_url_adapter(request)
 
     try:
         match = adapter.match(url, method=method)
-    except RequestRedirect as e:
+    except RequestRedirect as ex:
         # recursively match redirects
-        return get_view_function(app, e.new_url, method)
+        return get_view_function(app, ex.new_url, method)
     except (MethodNotAllowed, NotFound):
         # no match
         return None

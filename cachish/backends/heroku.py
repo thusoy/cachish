@@ -1,5 +1,3 @@
-from requests import Session
-
 from .json_http import JsonHttp
 
 
