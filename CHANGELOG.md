@@ -10,6 +10,7 @@ UNRELEASED -
 
 ### Added
 - A generic JSON backend: JsonHttp. Configure with a url and field (possibly several) to extract.
+- Configureable logging with metrics
 
 
 1.1.1 - 2017-01-19

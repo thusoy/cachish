@@ -4,8 +4,9 @@ import os
 import stat
 from unittest import mock
 
-from requests.exceptions import HTTPError
 import responses
+from requests.exceptions import HTTPError
+
 
 @responses.activate
 def test_working_call(client):

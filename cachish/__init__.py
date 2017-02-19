@@ -3,6 +3,7 @@ import fnmatch
 import hashlib
 import json
 import logging
+import logging.config
 import os
 import time
 from functools import wraps
@@ -12,19 +13,23 @@ from flask import Flask, jsonify, request, Response, current_app, abort
 
 from . import backends
 from . import cache
+from . import utils
 from .middleware import CanonicalLoggerMiddleware
 from ._version import __version__
 
 canonical_logger = CanonicalLoggerMiddleware()
 
+_logger = logging.getLogger(__name__)
 
-def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
+
+def create_app(auth=None, items=None, cache_dir='/var/cache/cachish', log_config=None):
     app = Flask(__name__, static_folder=None)
 
     if items:
         add_item_views(items, app)
 
     canonical_logger.init_app(app)
+    configure_logging(log_config)
 
     app.config.auth = transform_auth(auth)
     app.config.cache_dir = cache_dir
@@ -92,7 +97,7 @@ def create_view_for_value(module):
             backend_end_time = time.time()
         except: # pylint: disable=bare-except
             backend_end_time = time.time()
-            logging.exception('Failed to get value from %s', module)
+            _logger.exception('Failed to get value from %s', module)
             fresh = False
             try:
                 value = cache.read_from_cache()
@@ -130,7 +135,7 @@ def check_auth(token):
     requested_url = request.path
     token_spec = current_app.config.auth.get(token)
     if not token_spec:
-        print('no accesses for token %s' % token)
+        _logger.debug('Rejecting unknown token "%s"' % token)
         abort(403)
 
     token_globs = token_spec['url']
@@ -143,7 +148,8 @@ def check_auth(token):
         if fnmatch.fnmatchcase(requested_url, pattern):
             break
     else:
-        print('No patterns for token %s' % token)
+        _logger.debug('Token "%s" has no patterns matching the current url of %s' % (
+            token, requested_url))
         abort(403)
 
     return True
@@ -174,3 +180,59 @@ def requires_auth(view):
 
         return view(*args, **kwargs)
     return decorated
+
+
+def configure_logging(log_config):
+    # Set some sensible default that can be overridden through for each deployment
+    default_log_config = {
+        'version': 1,
+        'formatters': {
+            'simple': {
+                'format': '%(asctime)s %(levelname)-10s %(name)s %(message)s',
+            },
+            'canonical': {
+                'format': '%(asctime)s %(message)s',
+            },
+        },
+        'handlers': {
+            'stdout_canonical': {
+                'class': 'logging.StreamHandler',
+                'level': 'INFO',
+                'formatter': 'canonical',
+                'stream': 'ext://sys.stdout',
+            },
+            'stdout': {
+                'class': 'logging.StreamHandler',
+                'level': 'INFO',
+                'formatter': 'simple',
+                'stream': 'ext://sys.stdout',
+            },
+        },
+        'loggers': {
+            'cachish': {
+                'level': 'INFO',
+                'handlers': ['stdout'],
+                'propagate': False,
+            },
+            'cachish.canonical': {
+                'level': 'INFO',
+                'handlers': ['stdout_canonical'],
+                'propagate': False,
+            },
+            'werkzeug': {
+                'level': 'WARNING',
+                'handlers': ['stdout'],
+                'propagate': False,
+            },
+        },
+        'root': {
+            'level': 'WARNING',
+            'handlers': ['stdout'],
+        },
+        'disable_existing_loggers': False,
+    }
+
+    if log_config:
+        utils.merge_dicts(default_log_config, log_config)
+
+    logging.config.dictConfig(default_log_config)
