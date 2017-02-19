@@ -31,3 +31,8 @@ class JsonHttp(object):
         if not self.fields:
             return response_json
         return {key: response_json[key] for key in self.fields}
+
+
+    @property
+    def tag(self):
+        return 'JsonHttp/%s' % self.target_url

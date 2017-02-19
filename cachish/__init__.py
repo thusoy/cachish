@@ -4,6 +4,7 @@ import hashlib
 import json
 import logging
 import os
+import time
 from functools import wraps
 
 import yaml
@@ -11,13 +12,19 @@ from flask import Flask, jsonify, request, Response, current_app, abort
 
 from . import backends
 from . import cache
+from .middleware import CanonicalLoggerMiddleware
 from ._version import __version__
+
+canonical_logger = CanonicalLoggerMiddleware()
+
 
 def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     app = Flask(__name__, static_folder=None)
 
     if items:
         add_item_views(items, app)
+
+    canonical_logger.init_app(app)
 
     app.config.auth = transform_auth(auth)
     app.config.cache_dir = cache_dir
@@ -74,13 +81,17 @@ def create_view_for_value(module):
     @requires_auth
     def view():
         fresh = True
+        canonical_logger.tag = module.tag
         headers = {
             'Content-Type': 'application/json',
             'Server': 'Cachish/%s' % __version__,
         }
+        backend_start_time = time.time()
         try:
             value = module.get()
+            backend_end_time = time.time()
         except: # pylint: disable=bare-except
+            backend_end_time = time.time()
             logging.exception('Failed to get value from %s', module)
             fresh = False
             try:
@@ -88,10 +99,14 @@ def create_view_for_value(module):
             except FileNotFoundError:
                 abort(503)
 
+        cache_status = 'miss' if fresh else 'hit'
+        canonical_logger.add_measure('timing_backend', backend_end_time - backend_start_time)
+        canonical_logger.add_to_log('cache', cache_status)
+
         if fresh:
             cache.write_to_cache(value)
 
-        headers['X-Cache'] = 'miss' if fresh else 'hit'
+        headers['X-Cache'] = cache_status
 
         return json.dumps(value), 200, headers
 
