@@ -10,6 +10,7 @@ import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
 
 from . import backends
+from ._version import __version__
 
 def create_app(auth=None, items=None, cache_dir='/var/cache/cachish'):
     app = Flask(__name__, static_folder=None)
@@ -81,6 +82,7 @@ def create_view_for_value(module):
         fresh = True
         headers = {
             'Content-Type': 'application/json',
+            'Server': 'Cachish/%s' % __version__,
         }
         try:
             value = module.get()

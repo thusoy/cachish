@@ -30,6 +30,7 @@ def test_working_call(client):
     cache_stat = os.stat(cache_file)
     cache_mode = stat.S_IMODE(cache_stat.st_mode)
     assert cache_mode == 0o400
+    assert 'Cachish' in response.headers['server']
 
 
 def test_auth_404(client):
