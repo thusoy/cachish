@@ -20,7 +20,7 @@ create_cache_dir () {
 create_log_dir () {
     mkdir -p "$LOG_DIR"
     touch "$LOG_DIR/cachish.warn" "$LOG_DIR/canonical.log"
-    chmod 640 "$LOG_DIR/*"
+    chmod 640 "$LOG_DIR/"*
     chown -R cachish:adm "$LOG_DIR"
     chmod 755 "$LOG_DIR"
 }
