@@ -30,7 +30,10 @@ setup(
         'gunicorn': [
             'gunicorn',
             'gevent',
-        ]
+        ],
+        'postgres': [
+            'psycopg2',
+        ],
     },
     classifiers=[
         # 'Development Status :: 1 - Planning',

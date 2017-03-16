@@ -1,4 +1,4 @@
--e .
+-e .[postgres]
 
 pylint
 pytest
