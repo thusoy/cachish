@@ -7,6 +7,7 @@ from setuptools import setup, find_packages
 
 install_requires = [
     'flask',
+    'mohawk',
     'pyyaml',
     'requests',
 ]
