@@ -1,2 +1,22 @@
 # Used to package the debian package
-.[gunicorn]
+# Pins versions to ensure the package is built consistently and reproducibly
+
+flask==0.12.1
+mohawk==0.3.4
+pyyaml==3.12
+requests==2.14.2
+gevent==1.2.1
+gunicorn==19.7.1
+
+# gevent deps
+greenlet==0.4.12
+
+# flask deps
+Jinja2==2.9.6
+MarkupSafe==1.0
+Werkzeug==0.12.1
+click==6.7
+itsdangerous==0.24
+
+# mohawk deps
+six==1.10.0
