@@ -40,7 +40,7 @@ bump_version () {
 }
 
 patch_changelog () {
-    release_date=$(date --utc +"%Y-%m-%d")
+    release_date=$(date -u +"%Y-%m-%d")
     temp_changelog=$(mktemp)
     sed "s/UNRELEASED -[ ]*/$version - $release_date/" \
         < CHANGELOG.md \
