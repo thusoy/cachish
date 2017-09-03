@@ -10,14 +10,14 @@ from functools import wraps
 
 import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
+from flask_canonical import CanonicalLogger
 
 from . import backends
 from . import cache
 from . import utils
-from .middleware import CanonicalLoggerMiddleware
 from ._version import __version__
 
-_canonical_logger = CanonicalLoggerMiddleware()
+_canonical_logger = CanonicalLogger()
 _logger = logging.getLogger(__name__)
 
 
@@ -110,7 +110,7 @@ def create_view_for_value(module):
 
         cache_status = 'miss' if fresh else 'hit'
         _canonical_logger.add_measure('timing_backend', backend_end_time - backend_start_time)
-        _canonical_logger.add_to_log('cache', cache_status)
+        _canonical_logger.add('cache', cache_status)
 
         if fresh:
             cache.write_to_cache(value)

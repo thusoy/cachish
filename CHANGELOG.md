@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+UNRELEASED -
+------------------
+
+### Fixed
+- Replace custom middleware for canonical logging with flask-canonical.
+
+
 1.3.0 - 2017-05-11
 ------------------
 
