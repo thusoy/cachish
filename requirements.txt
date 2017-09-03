@@ -2,6 +2,7 @@
 # Pins versions to ensure the package is built consistently and reproducibly
 
 flask==0.12.1
+flask-canonical==0.1.1
 mohawk==0.3.4
 pyyaml==3.12
 requests==2.14.2
