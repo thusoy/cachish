@@ -33,7 +33,7 @@ In decreasing order of stuff you have to do:
 * Install from my apt repo:
   ```
   $ echo 'deb https://thusoy-apt.s3-accelerate.amazonaws.com stable main' | sudo tee -a /etc/apt/sources.list
-  $ curl https://github/thusoy/repo/release-key.asc | sudo apt-key add -
+  $ curl https://raw.githubusercontent.com/thusoy/repo/master/release-key.asc | sudo apt-key add -
   $ sudo apt-get update
   $ sudo apt-get install cachish
   ```
