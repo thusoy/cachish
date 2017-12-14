@@ -105,4 +105,8 @@ EOF
 
 main
 
+# We need to disable unset checking for debhelper to work, until
+# https://github.com/spotify/dh-virtualenv/pull/218 is released.
+set +u
+
 #DEBHELPER#
