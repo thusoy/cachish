@@ -142,6 +142,8 @@ def check_auth(token):
         _logger.debug('Rejecting unknown token "%s"', token)
         abort(403)
 
+    _canonical_logger.add('auth', token_spec['name'])
+
     token_globs = token_spec['url']
 
     # If there's only a single glob, transform to list
