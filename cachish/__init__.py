@@ -169,15 +169,22 @@ def authenticate():
 def requires_auth(view):
     @wraps(view)
     def decorated(*args, **kwargs):
-        auth = request.headers.get('authorization')
-        if not auth:
-            abort(401)
-        auth_parts = auth.split()
-        if not len(auth_parts) == 2:
-            abort(400)
-        scheme, token = auth_parts
-        if not scheme.lower() == 'bearer':
-            abort(400)
+        _canonical_logger.add('auth_method', None)
+        basic_auth = request.authorization
+        if basic_auth:
+            token = basic_auth.username
+            _canonical_logger.add('auth_method', 'basic')
+        else:
+            auth = request.headers.get('authorization')
+            if not auth:
+                abort(401)
+            auth_parts = auth.split()
+            if not len(auth_parts) == 2:
+                abort(400)
+            scheme, token = auth_parts
+            if not scheme.lower() == 'bearer':
+                abort(400)
+            _canonical_logger.add('auth_method', 'bearer')
 
         if not check_auth(token):
             return authenticate()

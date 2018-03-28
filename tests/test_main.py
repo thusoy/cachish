@@ -1,9 +1,11 @@
+import base64
 import hashlib
 import json
 import os
 import stat
 from unittest import mock
 
+import pytest
 import responses
 from requests.exceptions import HTTPError
 
@@ -34,14 +36,40 @@ def test_working_call(client):
     assert 'Cachish' in response.headers['server']
 
 
+@responses.activate
+def test_working_username_auth(client):
+    responses.add(responses.GET, 'https://api.heroku.com/apps/myapp/config-vars',
+        json={"MYKEY": "MYVALUE"})
+
+    heroku_mock = mock.Mock(return_value='postgres://mydbhost')
+
+    with mock.patch('cachish.backends.Heroku', heroku_mock):
+        response = client.get('/heroku/database-url', headers={
+            'authorization': create_basic_auth_header('footoken'),
+        })
+
+    assert response.status_code == 200
+    assert response.headers.get('x-cache') == 'miss'
+
+
+def create_basic_auth_header(token):
+    username = '%s:' % token
+    encoded_username = base64.b64encode(username.encode('utf-8'))
+    return 'Basic %s' % encoded_username.decode('utf-8')
+
+
 def test_auth_404(client):
     assert client.get('/some/path').status_code == 404
     assert client.get('/heroku/database-url/some/subpath').status_code == 404
 
 
-def test_invalid_token(client):
+@pytest.mark.parametrize('unknown_token', (
+    create_basic_auth_header('badtoken'),
+    'Bearer badtoken',
+))
+def test_unknown_auth_token(client, unknown_token):
     response = client.get('/heroku/database-url', headers={
-        'authorization': 'Bearer foobar',
+        'authorization': unknown_token,
     })
     assert response.status_code == 403
 
