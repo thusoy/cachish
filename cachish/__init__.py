@@ -178,12 +178,12 @@ def requires_auth(view):
             _canonical_logger.add('auth_method', 'basic')
         else:
             auth = request.headers.get('authorization')
-            if not auth:
+            if auth is None:
                 abort(401)
-            auth_parts = auth.split()
-            if not len(auth_parts) == 2:
+            try:
+                scheme, token = auth.split(None, 1)
+            except ValueError:
                 abort(400)
-            scheme, token = auth_parts
             if not scheme.lower() == 'bearer':
                 abort(400)
             _canonical_logger.add('auth_method', 'bearer')

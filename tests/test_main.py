@@ -63,6 +63,19 @@ def test_auth_404(client):
     assert client.get('/heroku/database-url/some/subpath').status_code == 404
 
 
+@pytest.mark.parametrize('invalid_auth', (
+    '',
+    'foo',
+    'unknown thing',
+    'lots of stuff',
+))
+def test_invalid_auth(client, invalid_auth):
+    response = client.get('/heroku/database-url', headers={
+        'authorization': invalid_auth,
+    })
+    assert response.status_code == 400
+
+
 @pytest.mark.parametrize('unknown_token', (
     create_basic_auth_header('badtoken'),
     'Bearer badtoken',
