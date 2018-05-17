@@ -5,7 +5,12 @@ import os
 from cachish import create_app
 
 items = {
-    # TODO: Add your test items here
+    '/amazon': {
+        'module': 'JsonHttp',
+        'parameters': {
+            'url': 'https://ip-ranges.amazonaws.com/ip-ranges.json',
+        }
+    }
 }
 
 auth = {
