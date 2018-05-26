@@ -11,6 +11,9 @@ UNRELEASED -
 ### Added
 - Authorization can now be done with Basic auth in addition to Bearer tokens.
 
+### Fixed
+- Builds consistently for both debian jessie and stretch.
+
 
 1.3.1 - 2017-09-03
 ------------------

@@ -105,4 +105,6 @@ EOF
 
 main
 
+set +eu
+
 #DEBHELPER#
