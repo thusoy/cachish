@@ -2,6 +2,8 @@
 
 set -eu
 
+export DH_VIRTUALENV_INSTALL_ROOT=/opt/venvs
+
 main () {
     create_changelog
     dpkg-buildpackage -us -uc
