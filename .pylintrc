@@ -23,6 +23,7 @@ load-plugins=
 disable=missing-docstring,
     bad-continuation,
     star-args,
+    useless-object-inheritance,
     I
 
 [REPORTS]
