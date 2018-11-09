@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
+UNRELEASED -
+------------------
+
+### Fixed
+- Updated dependencies, among minor bugfixes this also mitigates [CVE-2018-18074](https://nvd.nist.gov/vuln/detail/CVE-2018-18074).
+
+
 1.4.0 - 2018-05-26
 ------------------
 
