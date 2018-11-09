@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 UNRELEASED -
 ------------------
 
+### Removed
+- Support for python 3.3.
+
 ### Fixed
 - Updated dependencies, among minor bugfixes this also mitigates [CVE-2018-18074](https://nvd.nist.gov/vuln/detail/CVE-2018-18074).
 
