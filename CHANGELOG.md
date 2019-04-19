@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
-UNRELEASED -
+1.5.1 - 2019-04-19
 ------------------
 
 ### Fixed
