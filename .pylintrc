@@ -24,7 +24,8 @@ disable=missing-docstring,
     bad-continuation,
     star-args,
     useless-object-inheritance,
-    I
+    I,
+    R
 
 [REPORTS]
 
