@@ -23,6 +23,14 @@ def app():
                     'config_key': 'MYKEY',
                 }
             },
+            '/no-auth': {
+                'module': 'JsonHttp',
+                'disable_auth': True,
+                'parameters': {
+                    'url': 'https://api.github.com/meta',
+                    'field': 'git',
+                }
+            },
         },
         'auth': {
             'client_name': {

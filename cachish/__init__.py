@@ -68,8 +68,12 @@ def add_item_views(items, app):
     for url, endpoint_config in items.items():
         module_name = endpoint_config['module']
         parameters = endpoint_config.get('parameters', {})
+        disable_auth = endpoint_config.get('disable_auth', False)
         module = get_module(module_name, parameters)
-        app.add_url_rule(url, endpoint=url, view_func=create_view_for_value(module))
+        app.add_url_rule(url,
+            endpoint=url,
+            view_func=create_view_for_value(module, disable_auth),
+        )
 
 
 def create_app_from_file(filename=None):
@@ -85,10 +89,15 @@ def get_module(name, parameters):
     return constructor(**parameters)
 
 
-def create_view_for_value(module):
-
-    @requires_auth
+def create_view_for_value(module, disable_auth):
     def view():
+        if not disable_auth:
+            auth_token = get_auth_token()
+            # This will abort if token is invalid
+            check_auth(auth_token)
+        else:
+            _canonical_logger.add('auth', 'disabled')
+
         fresh = True
         _canonical_logger.tag = module.tag
         headers = {
@@ -132,6 +141,27 @@ def add_error_handlers(app):
     app.register_error_handler(503, error_503)
 
 
+def get_auth_token():
+    _canonical_logger.add('auth_method', None)
+    basic_auth = request.authorization
+    if basic_auth:
+        token = basic_auth.username
+        _canonical_logger.add('auth_method', 'basic')
+    else:
+        auth = request.headers.get('authorization')
+        if auth is None:
+            abort(401)
+        try:
+            scheme, token = auth.split(None, 1)
+        except ValueError:
+            abort(400)
+        if not scheme.lower() == 'bearer':
+            abort(400)
+        _canonical_logger.add('auth_method', 'bearer')
+
+    return token
+
+
 def check_auth(token):
     """This function is called to check if a token /
     url combination is valid.
@@ -157,33 +187,6 @@ def check_auth(token):
     _logger.debug('Token "%s" has no patterns matching the current url of %s',
         token, requested_url)
     abort(403)
-
-
-def requires_auth(view):
-    @wraps(view)
-    def decorated(*args, **kwargs):
-        _canonical_logger.add('auth_method', None)
-        basic_auth = request.authorization
-        if basic_auth:
-            token = basic_auth.username
-            _canonical_logger.add('auth_method', 'basic')
-        else:
-            auth = request.headers.get('authorization')
-            if auth is None:
-                abort(401)
-            try:
-                scheme, token = auth.split(None, 1)
-            except ValueError:
-                abort(400)
-            if not scheme.lower() == 'bearer':
-                abort(400)
-            _canonical_logger.add('auth_method', 'bearer')
-
-        # This will abort if invalid
-        check_auth(token)
-
-        return view(*args, **kwargs)
-    return decorated
 
 
 def configure_logging(log_config):

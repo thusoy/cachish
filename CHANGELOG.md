@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
+UNRELEASED -
+------------------
+
+## Added
+- Endpoints can now run without authorization by specifying `disable_auth: True` in the config.
+
+
 1.5.1 - 2019-04-19
 ------------------
 

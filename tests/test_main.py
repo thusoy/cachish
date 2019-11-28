@@ -99,6 +99,18 @@ def test_no_token(client):
     assert response.status_code == 401
 
 
+
+@responses.activate
+def test_url_without_auth(client):
+    responses.add(responses.GET, 'https://api.github.com/meta',
+        json={'git': ['1.2.3.4/32']})
+
+    response = client.get('/no-auth')
+
+    assert response.status_code == 200
+    assert response.json['git'] == ['1.2.3.4/32']
+
+
 @responses.activate
 def test_backend_failure_no_cached(client):
     error = HTTPError('oops')
