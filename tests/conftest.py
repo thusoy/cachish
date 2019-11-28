@@ -27,8 +27,12 @@ def app():
         'auth': {
             'client_name': {
                 'token': 'footoken',
-                'url': '/heroku/*'
-            }
+                'url': '/heroku/*',
+            },
+            'old_client': {
+                'token': 'oldtoken',
+                'url': [],
+            },
         },
         'cache_dir': cache_dir,
     }

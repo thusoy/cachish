@@ -87,6 +87,13 @@ def test_unknown_auth_token(client, unknown_token):
     assert response.status_code == 403
 
 
+def test_token_without_allowed_urls(client):
+    response = client.get('/heroku/database-url', headers={
+        'authorization': 'Bearer oldtoken',
+    })
+    assert response.status_code == 403
+
+
 def test_no_token(client):
     response = client.get('/heroku/database-url')
     assert response.status_code == 401
