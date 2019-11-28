@@ -152,20 +152,11 @@ def check_auth(token):
 
     for pattern in token_globs:
         if fnmatch.fnmatchcase(requested_url, pattern):
-            break
-    else:
-        _logger.debug('Token "%s" has no patterns matching the current url of %s',
-            token, requested_url)
-        abort(403)
+            return
 
-    return True
-
-
-def authenticate():
-    """Sends a 401 response that enables basic auth"""
-    message = ('Could not verify your access level for that URL.\n'
-        'Send a Bearer authorization header with your access token')
-    return Response(message, 401, {})
+    _logger.debug('Token "%s" has no patterns matching the current url of %s',
+        token, requested_url)
+    abort(403)
 
 
 def requires_auth(view):
@@ -188,8 +179,8 @@ def requires_auth(view):
                 abort(400)
             _canonical_logger.add('auth_method', 'bearer')
 
-        if not check_auth(token):
-            return authenticate()
+        # This will abort if invalid
+        check_auth(token)
 
         return view(*args, **kwargs)
     return decorated
