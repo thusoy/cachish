@@ -1,10 +1,12 @@
 sudo: false
 language: python
 python:
-  - 3.4
-  - 3.5
-  - 3.6
-  - 3.6-dev
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.8-dev"
   - nightly
 install: ./configure
 before_script: ./tools/lint.sh
