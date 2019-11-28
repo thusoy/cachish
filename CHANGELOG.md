@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 UNRELEASED -
 ------------------
 
+## Changed
+- The project license has been changed from MIT to the Hippocratic License to deny use that
+  infringes on the United Nations Universal Declaration of Human Rights.
+
 ## Added
 - Endpoints can now run without authorization by specifying `disable_auth: True` in the config.
 

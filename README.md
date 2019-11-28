@@ -48,3 +48,11 @@ In decreasing order of stuff you have to do:
   directory no other user can read from.
 * Clone the repo, install the dependencies (`./configure`), and run
   with `./devserver.py`. Also mostly useful for testing.
+
+
+License
+-------
+
+This project uses the [Hippocratic License](https://firstdonoharm.dev/), and is thus freely
+available to use for purposes that do not infringe on the United Nations Universal Declaration of
+Human Rights.
