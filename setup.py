@@ -34,6 +34,7 @@ setup(
             'gevent',
         ]
     },
+    license='Hippocratic',
     classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
