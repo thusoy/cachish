@@ -8,11 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 1.6.0 - 2019-11-28
 ------------------
 
-## Changed
+### Changed
 - The project license has been changed from MIT to the Hippocratic License to deny use that
   infringes on the United Nations Universal Declaration of Human Rights.
 
-## Added
+### Added
 - Endpoints can now run without authorization by specifying `disable_auth: True` in the config.
 
 
