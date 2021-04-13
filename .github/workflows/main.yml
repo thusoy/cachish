@@ -2,15 +2,15 @@ name: Tests
 
 on: [push]
 
-strategy:
-    matrix:
-        python:
-            - '3.6'
-            - '3.7'
-            - '3.8'
 
 jobs:
   test:
+    strategy:
+      matrix:
+        python:
+          - '3.6'
+          - '3.7'
+          - '3.8'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
