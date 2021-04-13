@@ -1,0 +1,38 @@
+name: Tests
+
+on: [push]
+
+strategy:
+    matrix:
+        python:
+            - '3.6'
+            - '3.7'
+            - '3.8'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Cache venv
+        uses: actions/cache@v1
+        with:
+          path: venv
+          key: ${{ runner.os }}-venv-${{ matrix.python }}-${{ hashFiles('*requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-${{ matrix.python }}
+
+      - name: Configure
+        run: ./configure
+
+      - name: Lint
+        run: ./tools/lint.sh
+
+      - name: Run tests
+        run: ./test
