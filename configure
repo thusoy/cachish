@@ -8,7 +8,7 @@ main () {
 
 create_virtualenv () {
 	test -d venv \
-		|| virtualenv venv -p $(which python3)
+		|| python3 -m venv venv
 	./venv/bin/pip install -r dev-requirements.txt
 }
 
