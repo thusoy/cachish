@@ -5,6 +5,4 @@ pytest
 pytest-cov
 responses
 twine
-# 1.0.0 drops support for 3.5
-watchdog<1.0.0; python_version < '3.6'
-watchdog>=1.0.0; python_version >= '3.6'
+watchdog
