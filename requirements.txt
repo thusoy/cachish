@@ -2,7 +2,7 @@
 # Pins versions to ensure the package is built consistently and reproducibly
 
 flask==2.3.2
-flask-canonical==0.1.2
+flask-events==0.7.0
 mohawk==1.0.0
 pyyaml==5.4
 requests==2.21.0

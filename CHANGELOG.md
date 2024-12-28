@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+UNRELEASED -
+------------------
+
+### Changed
+- Swap flask-canonical for flask-events since the latter supports modern flask.
+
 
 1.6.0 - 2019-11-28
 ------------------

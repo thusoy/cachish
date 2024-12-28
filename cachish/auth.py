@@ -3,17 +3,17 @@ import logging
 
 from flask import abort, current_app, request
 
-from . import _canonical_logger
+from . import events
 
 _logger = logging.getLogger(__name__)
 
 
 def get_auth_token():
-    _canonical_logger.add('auth_method', None)
+    events.add('auth_method', None)
     basic_auth = request.authorization
     if basic_auth:
         token = basic_auth.username
-        _canonical_logger.add('auth_method', 'basic')
+        events.add('auth_method', 'basic')
     else:
         auth = request.headers.get('authorization')
         if auth is None:
@@ -24,7 +24,7 @@ def get_auth_token():
             abort(400)
         if not scheme.lower() == 'bearer':
             abort(400)
-        _canonical_logger.add('auth_method', 'bearer')
+        events.add('auth_method', 'bearer')
 
     return token
 
@@ -39,7 +39,7 @@ def check_auth(token):
         _logger.debug('Rejecting unknown token "%s"', token)
         abort(403)
 
-    _canonical_logger.add('auth', token_spec['name'])
+    events.add('auth', token_spec['name'])
 
     token_globs = token_spec['url']
 

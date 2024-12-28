@@ -8,11 +8,11 @@ import time
 
 import yaml
 from flask import Flask, jsonify, request, Response, current_app, abort
-from flask_canonical import CanonicalLogger
+from flask_events import Events
 
 # Import early to prevent circular import issues
 # pylint: disable=wrong-import-position
-_canonical_logger = CanonicalLogger()
+events = Events()
 
 from . import backends
 from . import cache
@@ -34,7 +34,7 @@ def create_app(
     if items:
         add_item_views(items, app)
 
-    _canonical_logger.init_app(app)
+    events.init_app(app)
     configure_logging(log_config)
 
     app.config.auth = transform_auth(auth)
@@ -98,10 +98,10 @@ def create_view_for_value(module, disable_auth):
             # This will abort if token is invalid
             check_auth(auth_token)
         else:
-            _canonical_logger.add('auth', 'disabled')
+            events.add('auth', 'disabled')
 
         fresh = True
-        _canonical_logger.tag = module.tag
+        events.tag = module.tag
         headers = {
             'Content-Type': 'application/json',
             'Server': f'Cachish/{__version__}',
@@ -120,8 +120,8 @@ def create_view_for_value(module, disable_auth):
                 abort(503)
 
         cache_status = 'miss' if fresh else 'hit'
-        _canonical_logger.add_measure('timing_backend', backend_end_time - backend_start_time)
-        _canonical_logger.add('cache', cache_status)
+        events.add('backend_duration_seconds', backend_end_time - backend_start_time)
+        events.add('cache', cache_status)
 
         if fresh:
             cache.write_to_cache(value)
