@@ -20,7 +20,7 @@ class Hawk(JsonHttp):
 
     @property
     def tag(self):
-        return 'Hawk/%s' % self.target_url
+        return f'Hawk/{self.target_url}'
 
     # For a GET request, Mohawk requires empty strings for content/content_type
     # See http://mohawk.readthedocs.io/en/latest/usage.html 'Sending a Request'

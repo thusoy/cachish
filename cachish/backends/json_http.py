@@ -4,7 +4,7 @@ from .._version import __version__
 
 
 class JsonHttp(object):
-    user_agent = 'cachish/%s (https://github.com/thusoy/cachish)' % __version__
+    user_agent = f'cachish/{__version__} (https://github.com/thusoy/cachish)'
 
     def __init__(self,
             url=None,
@@ -35,4 +35,4 @@ class JsonHttp(object):
 
     @property
     def tag(self):
-        return 'JsonHttp/%s' % self.target_url
+        return f'JsonHttp/{self.target_url}'

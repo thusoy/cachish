@@ -12,14 +12,14 @@ class Heroku(JsonHttp):
         assert config_key is not None
 
         self.app = app
-        target_url = 'https://api.heroku.com/apps/%s/config-vars' % app
+        target_url = f'https://api.heroku.com/apps/{app}/config-vars'
         super(Heroku, self).__init__(url=target_url, field=config_key)
         self.session.headers.update({
-            'Authorization': 'Bearer %s' % api_token,
+            'Authorization': f'Bearer {api_token}',
             'Accept': 'application/vnd.heroku+json; version=3',
         })
 
 
     @property
     def tag(self):
-        return 'Heroku/%s' % self.app
+        return f'Heroku/{self.app}'

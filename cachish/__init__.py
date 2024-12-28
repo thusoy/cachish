@@ -104,7 +104,7 @@ def create_view_for_value(module, disable_auth):
         _canonical_logger.tag = module.tag
         headers = {
             'Content-Type': 'application/json',
-            'Server': 'Cachish/%s' % __version__,
+            'Server': f'Cachish/{__version__}',
         }
         backend_start_time = time.time()
         try:
