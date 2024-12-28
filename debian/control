@@ -5,6 +5,7 @@ Maintainer: Tarjei Husøy <apt@thusoy.com>
 Build-Depends:
     debhelper (>= 9.20160709),
     python3,
+    python3-venv,
     dh-virtualenv (>= 0.7)
 Standards-Version: 3.9.5
 
