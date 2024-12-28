@@ -6,3 +6,4 @@ pytest-cov
 responses
 twine
 watchdog
+wheel
