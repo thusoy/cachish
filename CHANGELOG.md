@@ -9,6 +9,11 @@ UNRELEASED -
 
 ### Changed
 - Swap flask-canonical for flask-events since the latter supports modern flask.
+- Update dependencies.
+- Move CI to GitHub Actions.
+
+### Fixed
+- Fix building debs for bookworm.
 
 
 1.6.0 - 2019-11-28
