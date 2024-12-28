@@ -1,4 +1,4 @@
-[MASTER]
+[MAIN]
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
@@ -9,7 +9,7 @@ persistent=no
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins = pylint.extensions.bad_builtin
 
 
 [MESSAGES CONTROL]
@@ -24,6 +24,7 @@ disable=missing-docstring,
     bad-continuation,
     star-args,
     useless-object-inheritance,
+    unspecified-encoding,
     I,
     R
 
@@ -33,11 +34,6 @@ disable=missing-docstring,
 # (visual studio) and html. You can also give a reporter class, eg
 # mypackage.mymodule.MyReporterClass.
 output-format=colorized
-
-# Put messages in a separate file for each module / package specified on the
-# command line instead of printing them on stdout. Reports (if any) will be
-# written in a file name "pylint_global.[txt|html]".
-files-output=no
 
 # Tells whether to display a full report or only the messages
 reports=no
@@ -191,7 +187,7 @@ max-locals=7
 max-returns=3
 
 # Maximum number of branch for function / method body
-max-branchs=6
+max-branches=6
 
 # Maximum number of statements in function / method body
 max-statements=50
@@ -231,4 +227,4 @@ int-import-graph=
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
-overgeneral-exceptions=Exception
+overgeneral-exceptions=builtins.Exception
