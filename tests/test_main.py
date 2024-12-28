@@ -73,7 +73,7 @@ def test_invalid_auth(client, invalid_auth):
     response = client.get('/heroku/database-url', headers={
         'authorization': invalid_auth,
     })
-    assert response.status_code == 400
+    assert response.status_code == (401 if invalid_auth == '' else 400)
 
 
 @pytest.mark.parametrize('unknown_token', (

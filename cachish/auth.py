@@ -10,21 +10,15 @@ _logger = logging.getLogger(__name__)
 
 def get_auth_token():
     events.add('auth_method', None)
-    basic_auth = request.authorization
-    if basic_auth:
-        token = basic_auth.username
-        events.add('auth_method', 'basic')
-    else:
-        auth = request.headers.get('authorization')
-        if auth is None:
-            abort(401)
-        try:
-            scheme, token = auth.split(None, 1)
-        except ValueError:
-            abort(400)
-        if not scheme.lower() == 'bearer':
-            abort(400)
-        events.add('auth_method', 'bearer')
+    auth = request.authorization
+    if not auth:
+        abort(401)
+
+    if auth.type not in ('bearer', 'basic'):
+        abort(400)
+
+    token = auth.token if auth.type == 'bearer' else auth.parameters['username']
+    events.add('auth_method', auth.type)
 
     return token
 
